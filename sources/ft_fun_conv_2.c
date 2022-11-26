@@ -25,5 +25,5 @@ char	*ft_percent_conv(va_list *args)
 {
 	(void) args;
 	printf("ft_percent_conv");
-	return ("42%");
+	return ("%%");
 }

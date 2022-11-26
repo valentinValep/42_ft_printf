@@ -1,6 +1,8 @@
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
+#include <stdarg.h>
+
 # define CONVERSION_NUMBER 9
 
 typedef char	*(*t_fun_conv)(va_list *);

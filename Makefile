@@ -6,7 +6,7 @@
 #    By: vlepille <vlepille@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/21 02:24:43 by marvin            #+#    #+#              #
-#    Updated: 2022/11/26 15:03:10 by vlepille         ###   ########.fr        #
+#    Updated: 2022/11/26 15:49:25 by vlepille         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ binaries :
 	mkdir binaries
 
 binaries/%.o : sources/%.c
-	$(CC) $(FLAGS) $(INCLUDES) -c $< -o $@
+	$(CC) $(FLAGS) $(INCLUDES) -c $< -o $@ -g3
 
 all : $(NAME)
 

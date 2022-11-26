@@ -41,38 +41,40 @@ static char	*ft_fun_conv(char c, va_list *args)
 
 //}
 
-static int	ft_strlen_printf(char *str)
+static int	ft_strlen_printf(const char *str)
 {
 	int	i;
 
 	if (!str)
 		return (0);
 	i = 0;
-	while (str[i])
+	while (str[i] && str[i] != '%')
 		i++;
 	return (i);
 }
 
-static char	*ft_strjoin_printf(char *s1, char *s2)
+static char	*ft_strjoin_printf(char *s1, const char *s2, int *len)
 {
 	char	*res;
-	int		len;
 	int		i;
 	int		j;
+	int		k;
 
 	if (!s2)
 		return (NULL);
-	len = ft_strlen_printf(s1) + ft_strlen_printf(s2);
-	res = malloc((len + 1) * sizeof(char));
+	*len = ft_strlen_printf(s1) + ft_strlen_printf(s2);
+	res = malloc((*len + 1) * sizeof(char));
 	if (!res)
 		return ((char *)(long)(s1 && (free(s1), 0)));
-	res[len] = 0;
+	res[*len] = 0;
 	i = -1;
-	while (s1[++i])
+	while (s1 + ++i && s1[i])
 		res[i] = s1[i];
 	j = -1;
-	while (s2[++j])
-		res[i++] = s2[j];
+	k = 0;
+	while (++j + i < *len)
+		res[i + k++] = s2[j];
+	free(s1);
 	return (res);
 }
 
@@ -81,6 +83,7 @@ int	ft_printf(const char *format, ...)
 	va_list	args;
 	int		i;
 	int		len;
+	int		old_len;
 	char	*res;
 
 	res = NULL;
@@ -90,8 +93,15 @@ int	ft_printf(const char *format, ...)
 	while (format[++i])
 	{
 		if (format[i] == '%')
-			if (!ft_strjoin_printf(res, ft_fun_conv(format[++i], &args)))
-				return (-1);
+			res = ft_strjoin_printf(res, ft_fun_conv(format[++i], &args), &len);
+		else
+		{
+			old_len = len;
+			res = ft_strjoin_printf(res, format + i, &len);
+			i += len - old_len - 1;
+		}
+		if (!res)
+			return (-1);
 	}
 	va_end(args);
 	return (write(STDOUT_FILENO, res, len));

@@ -1,8 +1,7 @@
-#include "sources/ft_printf.h"
-
+#include <stdio.h>
 int	main(void)
 {
-	ft_printf("Char : {%c}\n\
+	printf("Char : {%c}\n\
 String : {%s}\n\
 Pointer : {%p}\n\
 Decimal : {%d}\n\
