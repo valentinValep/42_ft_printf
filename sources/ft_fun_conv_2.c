@@ -1,29 +1,45 @@
+#include <stdlib.h>
+#include <stdarg.h>
 
-#include <stdio.h>
 char	*ft_unsigned_conv(va_list *args)
 {
+	char *const	res = malloc((2 + 1) * sizeof(char));
+
 	(void) args;
-	printf("ft_unsigned_conv");
-	return ("42");
+	res[0] = '4';
+	res[1] = '2';
+	res[2] = 0;
+	return (res);
 }
 
 char	*ft_lower_hexa_conv(va_list *args)
 {
+	char *const	res = malloc((2 + 1) * sizeof(char));
+
 	(void) args;
-	printf("ft_lower_hexa_conv");
-	return ("2a");
+	res[0] = '2';
+	res[1] = 'a';
+	res[2] = 0;
+	return (res);
 }
 
 char	*ft_upper_hexa_conv(va_list *args)
 {
+	char *const	res = malloc((2 + 1) * sizeof(char));
+
 	(void) args;
-	printf("ft_upper_hexa_conv");
-	return ("2A");
+	res[0] = '2';
+	res[1] = 'A';
+	res[2] = 0;
+	return (res);
 }
 
 char	*ft_percent_conv(va_list *args)
 {
-	(void) args;
-	printf("ft_percent_conv");
-	return ("%%");
+	char *const	res = malloc((1 + 1) * sizeof(char));
+
+	(void) args; // @TODO Important to increment the va arg counter of 1
+	res[0] = '%';
+	res[1] = 0;
+	return (res);
 }

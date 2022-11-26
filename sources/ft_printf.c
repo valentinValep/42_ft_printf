@@ -53,7 +53,7 @@ static int	ft_strlen_printf(const char *str)
 	return (i);
 }
 
-static char	*ft_strjoin_printf(char *s1, const char *s2, int *len)
+static char	*ft_strjoin_printf(char *s1, const char *s2, int *len, int free_2)
 {
 	char	*res;
 	int		i;
@@ -72,9 +72,11 @@ static char	*ft_strjoin_printf(char *s1, const char *s2, int *len)
 		res[i] = s1[i];
 	j = -1;
 	k = 0;
-	while (++j + i < *len)
+	while (++j + i < *len) // for the % at the end the len = 128 and i too
 		res[i + k++] = s2[j];
 	free(s1);
+	if (free_2)
+		free((char *)s2);
 	return (res);
 }
 
@@ -93,11 +95,11 @@ int	ft_printf(const char *format, ...)
 	while (format[++i])
 	{
 		if (format[i] == '%')
-			res = ft_strjoin_printf(res, ft_fun_conv(format[++i], &args), &len);
+			res = ft_strjoin_printf(res, ft_fun_conv(format[++i], &args), &len, 1);
 		else
 		{
 			old_len = len;
-			res = ft_strjoin_printf(res, format + i, &len);
+			res = ft_strjoin_printf(res, format + i, &len, 0);
 			i += len - old_len - 1;
 		}
 		if (!res)
