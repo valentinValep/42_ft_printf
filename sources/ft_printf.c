@@ -13,7 +13,7 @@ static char	*ft_fun_conv(char c, va_list *args)
 	int			i;
 	const char	format_list[CONVERSION_NUMBER] = {'c', 's', 'p', 'd', 'i', 'u',
 		'x', 'X', '%'};
-	t_fun_conv	*fun_list;
+	t_fun_conv	*fun_list; // @TODO Make it const
 
 	fun_list = (t_fun_conv [CONVERSION_NUMBER]){&ft_char_conv,
 		&ft_string_conv, &ft_pointer_conv, &ft_decimal_conv, &ft_integer_conv,
