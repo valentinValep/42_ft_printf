@@ -1,5 +1,5 @@
 #include "sources/ft_printf.h"
-
+#include <stdio.h>
 int	main(void)
 {
 	printf("%d", ft_printf("Char : {%c}\n\
