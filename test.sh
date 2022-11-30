@@ -1,5 +1,5 @@
 make
-cc -Wall -Werror -Wextra main.c libftprintf.a -o exec -g3
+cc -Wall -Wextra main.c libftprintf.a -o exec -g3
 echo "\n\n"
 valgrind ./exec
 echo "\n\n"

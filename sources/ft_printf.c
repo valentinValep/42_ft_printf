@@ -32,62 +32,56 @@ static int	ft_strlen_printf(const char *str, int ignore_percent)
 	return (i);
 }
 
-static char	*ft_strjoin_printf(char *s1, const char *s2, int *len, int free_2)
+static char	*ft_strjoin_printf(t_display_buffer *buf, const char *s2, int conv)
 {
 	char	*res;
 	int		i;
 	int		j;
-	int		k;
 
 	if (!s2)
-		return (NULL);
-	*len = ft_strlen_printf(s1, 1) + ft_strlen_printf(s2, free_2);
-	res = malloc((*len + 1) * sizeof(char));
+		return ((char *)(long)(buf->buffer && (free(buf->buffer), 0)));
+	buf->len = ft_strlen_printf(buf->buffer, 1) + ft_strlen_printf(s2, conv);
+	res = malloc((buf->len + 1) * sizeof(char));
 	if (!res)
-		return ((char *)(long)(s1 && (free(s1), 0)));
-	res[*len] = 0;
+		return ((char *)(long)(buf->buffer && (free(buf->buffer), 0)));
+	res[buf->len] = 0;
 	i = -1;
-	while (s1 + ++i && s1[i])
-		res[i] = s1[i];
+	while (buf->buffer + ++i && buf->buffer[i])
+		res[i] = buf->buffer[i];
 	j = -1;
-	k = 0;
-	while (++j + i < *len)
-		res[i + k++] = s2[j];
-	free(s1);
-	if (free_2)
+	while (++j + i < buf->len)
+		res[i + j] = s2[j];
+	free(buf->buffer);
+	if (conv)
 		free((char *)s2);
 	return (res);
 }
-#include <stdio.h>
+
 int	ft_printf(const char *format, ...)
 {
-	va_list	args;
-	int		i;
-	int		len;
-	int		old_len;
-	char	*res;
-	int		errno;
+	va_list				args;
+	int					i;
+	t_display_buffer	res;
 
-	res = NULL;
+	res.buffer = NULL;
 	va_start(args, format);
 	i = -1;
-	len = 0;
+	res.len = 0;
 	while (format[++i])
 	{
 		if (format[i] == '%')
-			res = ft_strjoin_printf(res, ft_fun_conv(format[++i], &args), &len, 1);
+			res.buffer = ft_strjoin_printf(&res,
+					ft_fun_conv(format[++i], &args), 1);
 		else
 		{
-			old_len = len;
-			res = ft_strjoin_printf(res, format + i, &len, 0);
-			i += len - old_len - 1;
-			printf("%d==%d\n", i, len);
+			res.buffer = ft_strjoin_printf(&res, format + i, 0);
+			i += ft_strlen_printf(format + i, 0) - 1;
 		}
-		if (!res)
+		if (!res.buffer)
 			return (-1);
 	}
 	va_end(args);
-	errno = write(STDOUT_FILENO, res, len);
-	free(res);
-	return (errno);
+	res.len = write(STDOUT_FILENO, res.buffer, res.len); // @TODO PRINT IF THERE IS A FAIL
+	free(res.buffer);
+	return (res.len);
 }

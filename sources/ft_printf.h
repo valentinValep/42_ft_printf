@@ -24,4 +24,9 @@ char	*ft_itoa_unsigned(unsigned int n);
 void	ft_long_to_hexa(unsigned long long nbr, char *output, int i);
 char	*ft_itoa_hexa(unsigned int n, int lower);
 
+typedef struct s_display_buffer {
+	char	*buffer;
+	int		len;
+}	t_display_buffer;
+
 #endif
