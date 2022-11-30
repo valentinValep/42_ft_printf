@@ -1,5 +1,8 @@
 #include <stdlib.h>
 #include <stdarg.h>
+#include "ft_printf.h"
+
+char	*ft_itoa(int n);
 
 char	*ft_char_conv(va_list *args)
 {
@@ -12,47 +15,40 @@ char	*ft_char_conv(va_list *args)
 
 char	*ft_string_conv(va_list *args)
 {
-	char *const	res = malloc((3 + 1) * sizeof(char));
+	char		*res;
+	const char	*str;
+	int			i;
 
-	(void) args;
-	res[0] = 'A';
-	res[1] = 'B';
-	res[2] = 'C';
-	res[3] = 0;
+	str = (const char *) va_arg(*args, char const *);
+	i = -1;
+	while (str[++i])
+		;
+	res = malloc((i + 1) * sizeof(char));
+	res[i] = 0;
+	i = -1;
+	while (str[++i])
+		res[i] = str[i];
 	return (res);
 }
 
 char	*ft_pointer_conv(va_list *args)
 {
-	char *const	res = malloc((4 + 1) * sizeof(char));
+	char				*res;
+	unsigned long long	addr;
+	int					i;
 
-	(void) args;
+	res = malloc((15) * sizeof(char));
 	res[0] = '0';
 	res[1] = 'x';
-	res[2] = '4';
-	res[3] = '2';
-	res[4] = 0;
+	i = 1;
+	while (++i < 14)
+		res[i] = '0';
+	addr = (unsigned long long) va_arg(*args, unsigned long long);
+	long_to_hexa((unsigned long long) addr, res, 13);
 	return (res);
 }
 
 char	*ft_decimal_conv(va_list *args)
 {
-	char *const	res = malloc((2 + 1) * sizeof(char));
-
-	(void) args;
-	res[0] = '4';
-	res[1] = '2';
-	res[2] = 0;
-	return (res);
-}
-
-char	*ft_integer_conv(va_list *args)
-{
-	char *const	res = malloc((2 + 1) * sizeof(char));
-
-	(void) args;
-	res[0] = '4';
-	res[1] = '2';
-	res[2] = 0;
-	return (res);
+	return (ft_itoa(va_arg(*args, int)));
 }

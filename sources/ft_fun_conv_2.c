@@ -1,5 +1,17 @@
 #include <stdlib.h>
 #include <stdarg.h>
+#include "ft_printf.h"
+
+char	*ft_integer_conv(va_list *args)
+{
+	char *const	res = malloc((2 + 1) * sizeof(char));
+
+	(void) args;
+	res[0] = '4';
+	res[1] = '2';
+	res[2] = 0;
+	return (res);
+}
 
 char	*ft_unsigned_conv(va_list *args)
 {

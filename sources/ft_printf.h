@@ -19,6 +19,7 @@ char	*ft_lower_hexa_conv(va_list *args);
 char	*ft_upper_hexa_conv(va_list *args);
 char	*ft_percent_conv(va_list *args);
 
-
+char	*ft_itoa(int n);
+void	ft_long_to_hexa(unsigned long long nbr, char *output, int i);
 
 #endif
