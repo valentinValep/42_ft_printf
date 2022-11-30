@@ -1,13 +1,8 @@
-#include <stddef.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <unistd.h>
 #include "ft_printf.h"
 
-//char *(*fun_list[CONVERSION_NUMBER])(void *); = {&ft_char_conv,
-//	&ft_string_conv, &ft_pointer_conv, &ft_decimal_conv, &ft_integer_conv,
-//	&ft_unsigned_conv, &ft_lower_hexa_conv, &ft_upper_hexa_conv,
-//	&ft_percent_conv};
 static char	*ft_fun_conv(char c, va_list *args)
 {
 	int					i;
@@ -63,7 +58,7 @@ static char	*ft_strjoin_printf(char *s1, const char *s2, int *len, int free_2)
 		free((char *)s2);
 	return (res);
 }
-
+#include <stdio.h>
 int	ft_printf(const char *format, ...)
 {
 	va_list	args;
@@ -71,6 +66,7 @@ int	ft_printf(const char *format, ...)
 	int		len;
 	int		old_len;
 	char	*res;
+	int		errno;
 
 	res = NULL;
 	va_start(args, format);
@@ -85,10 +81,13 @@ int	ft_printf(const char *format, ...)
 			old_len = len;
 			res = ft_strjoin_printf(res, format + i, &len, 0);
 			i += len - old_len - 1;
+			printf("%d==%d\n", i, len);
 		}
 		if (!res)
 			return (-1);
 	}
 	va_end(args);
-	return (write(STDOUT_FILENO, res, len));
+	errno = write(STDOUT_FILENO, res, len);
+	free(res);
+	return (errno);
 }

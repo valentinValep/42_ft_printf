@@ -1,7 +1,7 @@
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
-#include <stdarg.h>
+# include <stdarg.h>
 
 # define CONVERSION_NUMBER 9
 
@@ -20,6 +20,8 @@ char	*ft_upper_hexa_conv(va_list *args);
 char	*ft_percent_conv(va_list *args);
 
 char	*ft_itoa(int n);
+char	*ft_itoa_unsigned(unsigned int n);
 void	ft_long_to_hexa(unsigned long long nbr, char *output, int i);
+char	*ft_itoa_hexa(unsigned int n, int lower);
 
 #endif

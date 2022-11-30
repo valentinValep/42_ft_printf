@@ -1,7 +1,7 @@
 make
-cc -Wall -Werror -Wextra main.c libft.a -o exec
+cc -Wall -Werror -Wextra main.c libftprintf.a -o exec -g3
 echo "\n\n"
-./exec
+valgrind ./exec
 echo "\n\n"
 rm exec
 make fclean

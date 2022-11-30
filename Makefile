@@ -6,11 +6,11 @@
 #    By: vlepille <vlepille@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/21 02:24:43 by marvin            #+#    #+#              #
-#    Updated: 2022/11/30 16:25:28 by vlepille         ###   ########.fr        #
+#    Updated: 2022/11/30 17:25:17 by vlepille         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = libft.a
+NAME = libftprintf.a
 
 CC = cc
 
@@ -18,27 +18,35 @@ FLAGS = -Wall -Werror -Wextra
 
 INCLUDES = -Isources
 
-SRC = sources/ft_printf.c \
-	sources/ft_fun_conv_1.c \
-	sources/ft_fun_conv_2.c \
-	sources/ft_long_to_hexa.c \
-	sources/ft_itoa.c
+SOURCES_DIR = sources
 
-OBJ = binaries/ft_printf.o \
-	binaries/ft_fun_conv_1.o \
-	binaries/ft_fun_conv_2.o \
-	binaries/ft_long_to_hexa.c \
-	binaries/ft_itoa.c
+BINARIES_DIR = binaries
+
+SRC = $(SOURCES_DIR)/ft_printf.c \
+	$(SOURCES_DIR)//ft_fun_conv_1.c \
+	$(SOURCES_DIR)//ft_fun_conv_2.c \
+	$(SOURCES_DIR)//ft_long_to_hexa.c \
+	$(SOURCES_DIR)//ft_itoa.c \
+	$(SOURCES_DIR)//ft_itoa_unsigned.c \
+	$(SOURCES_DIR)//ft_itoa_hexa.c
+
+OBJ = $(BINARIES_DIR)/ft_printf.o \
+	$(BINARIES_DIR)/ft_fun_conv_1.o \
+	$(BINARIES_DIR)/ft_fun_conv_2.o \
+	$(BINARIES_DIR)/ft_long_to_hexa.o \
+	$(BINARIES_DIR)/ft_itoa.o \
+	$(BINARIES_DIR)/ft_itoa_unsigned.o \
+	$(BINARIES_DIR)/ft_itoa_hexa.o
 
 RM = rm -f
 
-$(NAME) : binaries $(OBJ)
+$(NAME) : $(BINARIES_DIR) $(OBJ)
 	ar -rc $(NAME) $(OBJ)
 
-binaries :
-	mkdir binaries
+$(BINARIES_DIR) :
+	mkdir $(BINARIES_DIR)
 
-binaries/%.o : sources/%.c
+$(BINARIES_DIR)/%.o : $(SOURCES_DIR)/%.c
 	$(CC) $(FLAGS) $(INCLUDES) -c $< -o $@ -g3
 
 all : $(NAME)
