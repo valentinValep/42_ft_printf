@@ -81,7 +81,7 @@ int	ft_printf(const char *format, ...)
 			return (-1);
 	}
 	va_end(args);
-	res.len = write(STDOUT_FILENO, res.buffer, res.len); // @TODO PRINT IF THERE IS A FAIL
+	res.len = write(STDOUT_FILENO, res.buffer, res.len);
 	free(res.buffer);
 	return (res.len);
 }
