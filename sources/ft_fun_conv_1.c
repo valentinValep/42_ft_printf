@@ -4,82 +4,89 @@
 
 char	*ft_itoa(int n);
 
-char	*ft_char_conv(va_list *args)
+t_string	ft_char_conv(va_list *args)
 {
-	char *const	c = malloc((1 + 1) * sizeof(char));
+	t_string	res;
 
-	if (!c)
-		return (NULL);
-	c[1] = 0;
-	c[0] = (char) va_arg(*args, int);
-	return (c);
+	res.str = malloc((1 + 1) * sizeof(char));
+	if (!res.str)
+		return (res);
+	res.len = 1;
+	res.str[1] = 0;
+	res.str[0] = (char) va_arg(*args, int);
+	return (res);
 }
 
-char	*ft_string_conv(va_list *args)
+t_string	ft_string_conv(va_list *args)
 {
-	char		*res;
+	t_string	res;
 	const char	*str;
 	int			i;
 
 	str = (const char *) va_arg(*args, char const *);
-	i = -1;
-	while (str && str[++i])
-		;
-	res = malloc((i + 1 + (!str * 7)) * sizeof(char));
-	if (!res)
-		return (NULL);
 	if (!str)
-		return (res[++i] = '(', res[++i] = 'n', res[++i] = 'u',
-			res[++i] = 'l', res[++i] = 'l', res[++i] = ')', res[++i] = 0, res);
-	res[i] = 0;
+	{
+		res.str = malloc(7 * sizeof(char));
+		if (!res.str)
+			return (res);
+		return (res.len = 6, res.str[0] = '(', res.str[1] = 'n',
+			res.str[2] = 'u', res.str[3] = 'l', res.str[4] = 'l',
+			res.str[5] = ')', res.str[6] = 0, res);
+	}
+	res.len = -1;
+	while (str[++res.len])
+		;
+	res.str = malloc((res.len + 1) * sizeof(char));
+	if (!res.str)
+		return (res);
+	res.str[res.len] = 0;
 	i = -1;
-	while (str[++i])
-		res[i] = str[i];
+	while (++i < res.len)
+		res.str[i] = str[i];
 	return (res);
 }
 
-static char	*ft_return_nil(void)
+t_string	ft_pointer_conv(va_list *args)
 {
-	char	*res;
-	int		i;
-
-	res = malloc((6) * sizeof(char));
-	if (!res)
-		return (NULL);
-	i = 0;
-	return (res[i++] = '(', res[i++] = 'n', res[i++] = 'i',
-		res[i++] = 'l', res[i++] = ')', res[i++] = 0, res);
-}
-
-char	*ft_pointer_conv(va_list *args)
-{
-	char				*res;
+	t_string			res;
 	unsigned long long	addr;
 	unsigned long long	cpy;
 	int					i;
-	int					len;
 
 	addr = (unsigned long long) va_arg(*args, unsigned long long);
 	if (!addr)
-		return (ft_return_nil());
-	len = 0;
+	{
+		res.str = malloc(6 * sizeof(char));
+		if (!res.str)
+			return (res);
+		return (res.len = 5, res.str[0] = '(', res.str[1] = 'n',
+			res.str[2] = 'i', res.str[3] = 'l', res.str[4] = ')',
+			res.str[5] = 0, res);
+	}
+	res.len = 2;
 	cpy = addr;
 	while (cpy)
 	{
 		cpy /= 16;
-		len++;
+		res.len++;
 	}
-	res = malloc((len + 3) * sizeof(char));
-	if (!res)
-		return (NULL);
+	res.str = malloc((res.len + 1) * sizeof(char));
+	if (!res.str)
+		return (res);
 	i = 1;
-	while (++i < len + 2)
-		res[i] = '0';
-	ft_long_to_hexa((unsigned long long) addr, res, len + 1);
-	return (res[0] = '0', res[1] = 'x', res[len + 2] = 0, res);
+	while (++i < res.len)
+		res.str[i] = '0';
+	ft_long_to_hexa((unsigned long long) addr, res.str, res.len - 1);
+	return (res.str[0] = '0', res.str[1] = 'x', res.str[res.len] = 0, res);
 }
 
-char	*ft_decimal_conv(va_list *args)
+t_string	ft_decimal_conv(va_list *args)
 {
-	return (ft_itoa(va_arg(*args, int)));
+	t_string	res;
+
+	res.str = ft_itoa(va_arg(*args, int));
+	if (!res.str)
+		return (res);
+	res.len = ft_strlen(res.str);
+	return (res);
 }

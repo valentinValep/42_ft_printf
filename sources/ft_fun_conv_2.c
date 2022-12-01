@@ -2,34 +2,60 @@
 #include <stdarg.h>
 #include "ft_printf.h"
 
-char	*ft_integer_conv(va_list *args)
+t_string	ft_integer_conv(va_list *args)
 {
-	return (ft_itoa(va_arg(*args, int)));
+	t_string	res;
+
+	res.str = ft_itoa(va_arg(*args, int));
+	if (!res.str)
+		return (res);
+	res.len = ft_strlen(res.str);
+	return (res);
 }
 
-char	*ft_unsigned_conv(va_list *args)
+t_string	ft_unsigned_conv(va_list *args)
 {
-	return (ft_itoa_unsigned(va_arg(*args, int)));
+	t_string	res;
+
+	res.str = ft_itoa_unsigned(va_arg(*args, int));
+	if (!res.str)
+		return (res);
+	res.len = ft_strlen(res.str);
+	return (res);
 }
 
-char	*ft_lower_hexa_conv(va_list *args)
+t_string	ft_lower_hexa_conv(va_list *args)
 {
-	return (ft_itoa_hexa(va_arg(*args, int), 1));
+	t_string	res;
+
+	res.str = ft_itoa_hexa(va_arg(*args, int), 1);
+	if (!res.str)
+		return (res);
+	res.len = ft_strlen(res.str);
+	return (res);
 }
 
-char	*ft_upper_hexa_conv(va_list *args)
+t_string	ft_upper_hexa_conv(va_list *args)
 {
-	return (ft_itoa_hexa(va_arg(*args, int), 0));
+	t_string	res;
+
+	res.str = ft_itoa_hexa(va_arg(*args, int), 0);
+	if (!res.str)
+		return (res);
+	res.len = ft_strlen(res.str);
+	return (res);
 }
 
-char	*ft_percent_conv(va_list *args)
+t_string	ft_percent_conv(va_list *args)
 {
-	char *const	res = malloc((1 + 1) * sizeof(char));
+	t_string	res;
 
-	if (!res)
-		return (NULL);
 	(void) args;
-	res[0] = '%';
-	res[1] = 0;
+	res.str = malloc((1 + 1) * sizeof(char));
+	if (!res.str)
+		return (res);
+	res.len = 1;
+	res.str[0] = '%';
+	res.str[1] = 0;
 	return (res);
 }

@@ -14,7 +14,9 @@ Integer : {%i}\n\
 Unsigned : {%u}\n\
 LowHex : {%x}\n\
 UppHex : {%X}\n\
-Percent : {%%}\n", 'Z', "XYZ", a, &(int){42}, NULL, -21, -21, -21, -21, -21));
+Percent : {%%}\n\
+String : {%s}\n\
+", 'Z', "XYZ", a, &(int){42}, NULL, -21, -21, -21, -21, -21, "TEST"));
 
 	printf("%d\n", ft_printf("YOURS :\nChar : {%c}\n\
 String : {%s}\n\
@@ -26,7 +28,17 @@ Integer : {%i}\n\
 Unsigned : {%u}\n\
 LowHex : {%x}\n\
 UppHex : {%X}\n\
-Percent : {%%}\n", 'Z', "XYZ", a, &(int){42}, NULL, -21, -21, -21, -21, -21));
+Percent : {%%}\n\
+String : {%s}\n\
+", 'Z', "XYZ", a, &(int){42}, NULL, -21, -21, -21, -21, -21, "TEST"));
 	printf("%d\n", printf("fail : %y\n", 42));
 	printf("%d\n", ft_printf("fail : %y\n", 42));
+
+	printf("\n\n");
+	printf("%d\n", printf("%d<-int\n", 42));
+	printf("%d\n", ft_printf("%d<-int\n", 42));
+
+	printf("\n\n");
+	printf("%d\n", printf("%c<-\\0\n", 0));
+	printf("%d\n", ft_printf("%c<-\\0\n", 0));
 }

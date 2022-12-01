@@ -5,19 +5,24 @@
 
 # define CONVERSION_NUMBER 9
 
-typedef char	*(*t_fun_conv)(va_list *);
-
 int		ft_printf(const char *format, ...);
 
-char	*ft_char_conv(va_list *args);
-char	*ft_string_conv(va_list *args);
-char	*ft_pointer_conv(va_list *args);
-char	*ft_decimal_conv(va_list *args);
-char	*ft_integer_conv(va_list *args);
-char	*ft_unsigned_conv(va_list *args);
-char	*ft_lower_hexa_conv(va_list *args);
-char	*ft_upper_hexa_conv(va_list *args);
-char	*ft_percent_conv(va_list *args);
+typedef struct s_string {
+	char	*str;
+	int		len;
+}	t_string;
+
+typedef t_string	(*t_fun_conv)(va_list *);
+
+t_string	ft_char_conv(va_list *args);
+t_string	ft_string_conv(va_list *args);
+t_string	ft_pointer_conv(va_list *args);
+t_string	ft_decimal_conv(va_list *args);
+t_string	ft_integer_conv(va_list *args);
+t_string	ft_unsigned_conv(va_list *args);
+t_string	ft_lower_hexa_conv(va_list *args);
+t_string	ft_upper_hexa_conv(va_list *args);
+t_string	ft_percent_conv(va_list *args);
 
 char	*ft_itoa(int n);
 char	*ft_itoa_unsigned(unsigned int n);
@@ -28,5 +33,7 @@ typedef struct s_display_buffer {
 	char	*buffer;
 	int		len;
 }	t_display_buffer;
+
+int	ft_strlen(char *str);
 
 #endif
