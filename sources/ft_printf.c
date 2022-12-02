@@ -6,16 +6,15 @@
 /*   By: vlepille <vlepille@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 00:20:05 by vlepille          #+#    #+#             */
-/*   Updated: 2022/12/01 00:20:05 by vlepille         ###   ########.fr       */
+/*   Updated: 2022/12/02 04:23:06 by vlepille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include <stdarg.h>
 #include <unistd.h>
 #include "ft_printf.h"
 
-static char	*ft_fun_conv(char c, va_list *args)
+static void	ft_fun_conv(char c, va_list *args, t_display_buffer *buf)
 {
 	int					i;
 	const char			format_list[CONVERSION_NUMBER] = "cspdiuxX%";
@@ -28,72 +27,65 @@ static char	*ft_fun_conv(char c, va_list *args)
 	while (++i < CONVERSION_NUMBER && format_list[i] != c)
 		;
 	if (i == CONVERSION_NUMBER)
-		return (NULL);
-	return (fun_list[i](args));
+	{
+		ft_write_buf(buf, (char []){'%', c}, 2);
+		return ;
+	}
+	fun_list[i](args, buf);
 }
 
-static int	ft_strlen_printf(const char *str, int ignore_percent)
+void	ft_write_buf(t_display_buffer *buf, char const *str, int len)
 {
 	int	i;
 
-	if (!str)
-		return (0);
-	i = 0;
-	while (str[i] && (str[i] != '%' || ignore_percent))
-		i++;
-	return (i);
-}
-
-static char	*ft_strjoin_printf(t_display_buffer *buf, const char *s2, int conv)
-{
-	char	*res;
-	int		i;
-	int		j;
-
-	if (!s2)
-		return ((char *)(long)(buf->buffer && (free(buf->buffer), 0)));
-	buf->len = ft_strlen_printf(buf->buffer, 1) + ft_strlen_printf(s2, conv);
-	res = malloc((buf->len + 1) * sizeof(char));
-	if (!res)
-		return ((char *)(long)(buf->buffer && (free(buf->buffer), 0)));
-	res[buf->len] = 0;
 	i = -1;
-	while (buf->buffer + ++i && buf->buffer[i])
-		res[i] = buf->buffer[i];
-	j = -1;
-	while (++j + i < buf->len)
-		res[i + j] = s2[j];
-	free(buf->buffer);
-	if (conv)
-		free((char *)s2);
-	return (res);
+	while (++i < len)
+	{
+		buf->buffer[buf->offset++] = str[i];
+		if (buf->offset == BUFFER_SIZE)
+		{
+			if (write(STDOUT_FILENO, buf->buffer, BUFFER_SIZE) < 0)
+			{
+				buf->offset = -1;
+				return ;
+			}
+			else
+			{
+				buf->offset = 0;
+				buf->total_length += BUFFER_SIZE;
+			}
+		}
+	}
 }
 
 int	ft_printf(const char *format, ...)
 {
-	va_list				args;
-	int					i;
-	t_display_buffer	res;
+	va_list					args;
+	t_display_buffer		buf;
+	int						i;
+	int						len;
 
-	res.buffer = NULL;
+	i = 0;
+	buf.offset = 0;
+	buf.total_length = 0;
 	va_start(args, format);
-	i = -1;
-	res.len = 0;
-	while (format[++i])
+	while (format[i] && buf.total_length >= 0)
 	{
+		len = 2;
 		if (format[i] == '%')
-			res.buffer = ft_strjoin_printf(&res,
-					ft_fun_conv(format[++i], &args), 1);
+			ft_fun_conv(format[i + 1], &args, &buf);
 		else
 		{
-			res.buffer = ft_strjoin_printf(&res, format + i, 0);
-			i += ft_strlen_printf(format + i, 0) - 1;
+			len = 0;
+			while (format[i + len] != '%' && format[i + len])
+				len++;
+			ft_write_buf(&buf, format + i, len);
 		}
-		if (!res.buffer)
-			return (-1);
+		i += len;
 	}
 	va_end(args);
-	res.len = write(STDOUT_FILENO, res.buffer, res.len);
-	free(res.buffer);
-	return (res.len);
+	buf.total_length += buf.offset * (buf.total_length >= 0);
+	if (write(STDOUT_FILENO, buf.buffer, buf.offset) < 0)
+		return (-1);
+	return (buf.total_length);
 }
