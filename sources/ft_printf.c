@@ -46,31 +46,42 @@ void	ft_write_buf(t_display_buffer *buf, char const *str, int len)
 	}
 }
 
-int	ft_printf(const char *format, ...)
+void	ft_printf_loop(const char *format, va_list *args, t_display_buffer *buf)
 {
-	va_list					args;
-	t_display_buffer		buf;
-	int						i;
-	int						len;
+	int	len;
+	int	i;
 
 	i = 0;
-	buf.offset = 0;
-	buf.total_length = 0;
-	va_start(args, format);
-	while (format[i] && buf.total_length >= 0)
+	while (format[i] && buf->total_length >= 0)
 	{
 		len = 2;
 		if (format[i] == '%')
-			ft_fun_conv(format[i + 1], &args, &buf);
+		{
+			if (format[i + len])
+				ft_fun_conv(format[i + 1], args, buf);
+			else
+				buf->total_length = -1;
+		}
 		else
 		{
 			len = 0;
 			while (format[i + len] != '%' && format[i + len])
 				len++;
-			ft_write_buf(&buf, format + i, len);
+			ft_write_buf(buf, format + i, len);
 		}
 		i += len;
 	}
+}
+
+int	ft_printf(const char *format, ...)
+{
+	va_list					args;
+	t_display_buffer		buf;
+
+	buf.offset = 0;
+	buf.total_length = 0;
+	va_start(args, format);
+	ft_printf_loop(format, &args, &buf);
 	va_end(args);
 	buf.total_length += buf.offset * (buf.total_length >= 0);
 	if (write(STDOUT_FILENO, buf.buffer, buf.offset) < 0)
