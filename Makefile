@@ -6,7 +6,7 @@
 #    By: vlepille <vlepille@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/21 02:24:43 by marvin            #+#    #+#              #
-#    Updated: 2022/12/01 06:43:11 by vlepille         ###   ########.fr        #
+#    Updated: 2022/12/02 11:22:46 by vlepille         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,8 @@ SRC = $(SOURCES_DIR)/ft_printf.c \
 	$(SOURCES_DIR)/ft_fun_conv_decimal.c \
 	$(SOURCES_DIR)/ft_fun_conv_hex.c
 
+#SRCS= $(addprefix $(SOURCES_DIR)/,$(SRC))
+
 OBJ = $(BINARIES_DIR)/ft_printf.o \
 	$(BINARIES_DIR)/ft_fun_conv_char.o \
 	$(BINARIES_DIR)/ft_fun_conv_decimal.o \
@@ -34,13 +36,13 @@ OBJ = $(BINARIES_DIR)/ft_printf.o \
 
 RM = rm -f
 
-$(NAME) : $(BINARIES_DIR) $(OBJ)
+$(NAME) : $(OBJ)
 	ar -rc $(NAME) $(OBJ)
 
 $(BINARIES_DIR) :
 	mkdir $(BINARIES_DIR)
 
-$(BINARIES_DIR)/%.o : $(SOURCES_DIR)/%.c
+$(BINARIES_DIR)/%.o : $(SOURCES_DIR)/%.c | $(BINARIES_DIR)
 	$(CC) $(FLAGS) $(INCLUDES) -c $< -o $@ -g3
 
 all : $(NAME)
