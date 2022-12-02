@@ -53,4 +53,8 @@ String : {%s}\n\
 	printf("\n\n");
 	printf("\n%d\n", printf("%c", 'a'));
 	printf("\n%d\n", ft_printf("%c", 'a'));
+
+	printf("\n\n");
+	printf("\n%d\n", printf("1, 2, 3, -d test, testing, 0.4s sound, 1, 2, 3xp, sound, -*dtest"));
+	printf("\n%d\n",ft_printf("1, 2, 3, -d test, testing, 0.4s sound, 1, 2, 3xp, sound, -*dtest"));
 }
