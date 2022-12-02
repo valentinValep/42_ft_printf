@@ -60,7 +60,7 @@ int	ft_printf(const char *format, ...)
 	while (format[i] && buf.total_length >= 0)
 	{
 		len = 2;
-		if (format[i] == '%' && format[i + 1])
+		if (format[i] == '%')
 			ft_fun_conv(format[i + 1], &args, &buf);
 		else
 		{
