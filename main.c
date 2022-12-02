@@ -49,4 +49,8 @@ String : {%s}\n\
 	printf("\n\n");
 	printf("\n%d\n", printf(""));
 	printf("\n%d\n", ft_printf(""));
+
+	printf("\n\n");
+	printf("\n%d\n", printf("%c", 'a'));
+	printf("\n%d\n", ft_printf("%c", 'a'));
 }
