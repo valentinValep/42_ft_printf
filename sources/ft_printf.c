@@ -69,7 +69,7 @@ void	ft_printf_loop(const char *format, va_list *args, t_display_buffer *buf)
 		len = 2;
 		if (format[i] == '%')
 		{
-			if (format[i + len])
+			if (format[i + 1])
 				ft_fun_conv(format[i + 1], args, buf);
 			else
 				buf->total_length = -1;
@@ -77,7 +77,7 @@ void	ft_printf_loop(const char *format, va_list *args, t_display_buffer *buf)
 		else
 		{
 			len = 0;
-			while (format[i + len] != '%' && format[i + len])
+			while (format[i + len] != '%' && format[i])
 				len++;
 			ft_write_buf(buf, format + i, len);
 		}
