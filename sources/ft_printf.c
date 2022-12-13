@@ -26,6 +26,8 @@ void	ft_write_buf(t_display_buffer *buf, char const *str, int len)
 {
 	int	i;
 
+	if (buf->offset < 0)
+		return ;
 	i = -1;
 	while (++i < len)
 	{
@@ -83,6 +85,8 @@ int	ft_printf(const char *format, ...)
 	va_start(args, format);
 	ft_printf_loop(format, &args, &buf);
 	va_end(args);
+	if (buf.offset < 0)
+		return (-1);
 	buf.total_length += buf.offset * (buf.total_length >= 0);
 	if (write(STDOUT_FILENO, buf.buffer, buf.offset) < 0)
 		return (-1);
